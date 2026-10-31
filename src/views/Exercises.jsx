@@ -5,7 +5,8 @@ import { useHowTo } from "../components/HowTo";
 const GROUPS = [
   { title: "Upper body & core", keys: ["pushup", "pike", "plank", "sideplank", "deadbug", "brace"] },
   { title: "Legs & glutes", keys: ["squat", "lunge", "bridge", "birddog"] },
-  { title: "Posture & mobility", keys: ["wallslide", "chintuck", "squeeze", "hipflexor"] },
+  { title: "Posture & mobility", keys: ["wallslide", "chintuck", "squeeze", "hipflexor", "stretch"] },
+  { title: "Breathing, mind & walking", keys: ["breathing", "meditation", "walk"] },
 ];
 
 export default function Exercises() {

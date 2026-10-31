@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { HOW_TO } from "../data";
+import { FIGURES } from "../figures";
 import Figure from "./Figure";
+import BreathTimer from "./BreathTimer";
 
 const HowToContext = createContext(() => {});
 export const useHowTo = () => useContext(HowToContext);
@@ -17,6 +19,8 @@ export function HowToProvider({ children }) {
 
 function HowToSheet({ exercise, meta, onClose }) {
   const info = HOW_TO[exercise];
+  const fig = FIGURES[exercise];
+  const hasGlow = fig.poses.some((p) => p.glow > 0.3);
 
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -45,9 +49,31 @@ function HowToSheet({ exercise, meta, onClose }) {
         <div className="sheet-grid">
           <div className="sheet-visual">
             <div className="hero">
-              <Figure name={exercise} animate />
+              <Figure name={exercise} animate ghost={!info.timer} labels />
             </div>
-            <div className="frames">
+            <div className="legend">
+              {fig.focus && (
+                <span>
+                  <i className="l-move" /> Moving part
+                </span>
+              )}
+              {hasGlow && (
+                <span>
+                  <i className="l-glow" /> {info.glowLabel || "Gently tighten here"}
+                </span>
+              )}
+              {!info.timer && (
+                <span>
+                  <i className="l-ghost" /> Start position
+                </span>
+              )}
+            </div>
+            {info.timer && (
+              <div className="sheet-timer">
+                <BreathTimer presets={info.timer} />
+              </div>
+            )}
+            <div className={`frames ${info.timer ? "hide" : ""}`}>
               <figure>
                 <Figure name={exercise} t={0} />
                 <figcaption>

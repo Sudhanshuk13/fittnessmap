@@ -1,59 +1,11 @@
-import { useEffect, useState } from "react";
 import { POSTURE } from "../data";
-import { todayIso, formatTime } from "../store";
+import { todayIso } from "../store";
 import { Card, Checklist, Bullets } from "../components/ui";
-
-function BreathTimer() {
-  const [total, setTotal] = useState(0);
-  const [endAt, setEndAt] = useState(null);
-  const [left, setLeft] = useState(0);
-  const running = endAt !== null;
-
-  useEffect(() => {
-    if (!endAt) return;
-    const tick = () => {
-      const l = Math.max(0, Math.round((endAt - Date.now()) / 1000));
-      setLeft(l);
-      if (l === 0) {
-        navigator.vibrate?.([200, 100, 200]);
-        setEndAt(null);
-      }
-    };
-    tick();
-    const id = setInterval(tick, 250);
-    return () => clearInterval(id);
-  }, [endAt]);
-
-  const start = (s) => {
-    setTotal(s);
-    setEndAt(Date.now() + s * 1000);
-  };
-  const inhale = Math.floor((total - left) / 4) % 2 === 0;
-
-  return (
-    <div className="breath">
-      <div className={`orb ${running ? "run" : ""}`}>
-        <span>{running ? (inhale ? "Breathe in" : "Breathe out") : "Ready"}</span>
-      </div>
-      <div className="timer-left">{running ? `${formatTime(left)} left` : "In 4s · Out 4s"}</div>
-      <div className="btn-row">
-        <button className="btn" onClick={() => start(180)}>
-          Morning · 3 min
-        </button>
-        <button className="btn alt" onClick={() => start(300)}>
-          Meditate · 5 min
-        </button>
-      </div>
-      {running && (
-        <button className="link-btn" onClick={() => setEndAt(null)}>
-          Stop
-        </button>
-      )}
-    </div>
-  );
-}
+import BreathTimer from "../components/BreathTimer";
+import { useHowTo } from "../components/HowTo";
 
 export default function Posture({ store }) {
+  const openHowTo = useHowTo();
   return (
     <div className="cols">
       <Card title="5-min posture routine">
@@ -76,6 +28,9 @@ export default function Posture({ store }) {
           ]}
         />
         <p className="muted small">Don't hold your breath or force deep breaths. Stop if dizzy.</p>
+        <button className="link-btn" onClick={() => openHowTo("breathing")}>
+          See how, with picture →
+        </button>
       </Card>
 
       <Card title="Evening meditation">
@@ -92,6 +47,9 @@ export default function Posture({ store }) {
         <p className="muted small">
           The aim isn't zero thoughts — it's practising coming back. Do daily for 2 weeks before going longer.
         </p>
+        <button className="link-btn" onClick={() => openHowTo("meditation")}>
+          See how, with picture →
+        </button>
       </Card>
 
       <Card title="While walking">
@@ -103,6 +61,9 @@ export default function Posture({ store }) {
             "Don't force your stomach in all day.",
           ]}
         />
+        <button className="link-btn" onClick={() => openHowTo("walk")}>
+          See how, with picture →
+        </button>
       </Card>
 
       <Card title="At the computer">

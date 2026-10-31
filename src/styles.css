@@ -19,10 +19,12 @@
 
   --fig: #1f2a27;
   --fig-far: #b4bfbc;
-  --fig-floor: #d5ddda;
+  --fig-floor: #dde4e1;
   --fig-wall: #eef2f1;
   --glow: #14b8a6;
   --thumb-bg: #f1f5f4;
+  --move: #ea580c;
+  --move-far: #fdba8c;
 
   --radius: 18px;
   --shadow: 0 1px 2px rgba(16, 24, 22, 0.04), 0 4px 16px rgba(16, 24, 22, 0.05);
@@ -53,6 +55,8 @@
     --fig-floor: #2f3b38;
     --fig-wall: #1b2422;
     --thumb-bg: #1b2523;
+    --move: #fb923c;
+    --move-far: #8a4520;
     --shadow: none;
   }
 }
@@ -278,15 +282,41 @@ main {
 
 /* ============ figures ============ */
 .figure { width: 100%; height: 100%; display: block; }
-.fig-limb { fill: none; stroke: var(--fig); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
-.fig-limb.far { stroke: var(--fig-far); }
+.fig-seg line { stroke: var(--fig); stroke-linecap: round; }
+.fig-seg circle { fill: var(--fig); }
+.fig-seg.far line { stroke: var(--fig-far); }
+.fig-seg.far circle { fill: var(--fig-far); }
+.fig-seg.move line { stroke: var(--move); }
+.fig-seg.move circle { fill: var(--move); }
+.fig-seg.far.move line { stroke: var(--move-far); }
+.fig-seg.far.move circle { fill: var(--move-far); }
 .fig-head { fill: var(--fig); }
-.fig-nose { fill: none; stroke: var(--fig); stroke-width: 4; stroke-linecap: round; }
-.fig-floor { stroke: var(--fig-floor); stroke-width: 3; stroke-linecap: round; }
+.fig-head.move { fill: var(--move); }
+.fig-nose { stroke: var(--fig); stroke-width: 4; stroke-linecap: round; }
+.fig-ghost { opacity: 0.12; }
+.fig-ghost .fig-seg line, .fig-ghost .fig-head { stroke: var(--fig); }
+.fig-mat { fill: var(--fig-floor); }
 .fig-wall { fill: var(--fig-wall); }
 .fig-glow { fill: var(--glow); }
-.fig-arrow { stroke: var(--accent); stroke-width: 2.5; stroke-linecap: round; }
-.fig-arrow-head { fill: var(--accent); }
+.fig-arrow { stroke: var(--move); stroke-width: 2.5; stroke-linecap: round; }
+.fig-arrow-head { fill: var(--move); }
+.fig-label text {
+  fill: var(--text);
+  font-weight: 650;
+  paint-order: stroke;
+  stroke: var(--thumb-bg);
+  stroke-width: 0.4em;
+  stroke-linejoin: round;
+}
+.fig-label line { stroke: var(--muted); stroke-width: 0.7; stroke-dasharray: 1.6 1.4; }
+.fig-label circle { fill: var(--muted); }
+
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 6px; border-radius: 4px; display: inline-block; }
+.legend .l-move { background: var(--move); }
+.legend .l-glow { background: var(--glow); opacity: 0.7; height: 10px; border-radius: 50%; }
+.legend .l-ghost { background: var(--fig); opacity: 0.18; }
 
 /* ============ notes & lists ============ */
 .note {
@@ -419,6 +449,8 @@ main {
 .avoid li { position: relative; padding: 0 0 8px 28px; color: var(--text); }
 .avoid li::before { content: "✕"; position: absolute; left: 4px; top: 0; color: var(--danger); font-weight: 800; }
 .sheet-done { margin-top: 18px; }
+.frames.hide { display: none; }
+.sheet-timer { margin-top: 16px; padding: 16px; border-radius: 16px; background: var(--thumb-bg); }
 
 @keyframes slide-up { from { transform: translateY(100%); } }
 @keyframes fade { from { opacity: 0; } }
@@ -463,6 +495,8 @@ main {
   box-shadow: 0 10px 40px color-mix(in srgb, var(--brand) 35%, transparent);
 }
 .orb.run { animation: breathe 8s ease-in-out infinite; }
+.orb.calm { animation: breathe 10s ease-in-out infinite; }
+.orb span { text-align: center; padding: 0 14px; font-size: 14px; line-height: 1.25; }
 @keyframes breathe { 0%, 100% { transform: scale(0.72); } 50% { transform: scale(1); } }
 .timer-left { font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }

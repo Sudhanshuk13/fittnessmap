@@ -49,6 +49,7 @@ export const HOW_TO = {
     avoid: ["Lower back sagging", "Holding your breath", "Sucking your stomach in hard — gentle brace only"],
   },
   bridge: {
+    glowLabel: "Squeeze here",
     name: "Glute bridge",
     works: ["Glutes", "Hamstrings", "Lower back"],
     steps: [
@@ -116,6 +117,7 @@ export const HOW_TO = {
     avoid: ["Tilting your head down", "Forcing or straining your neck"],
   },
   sideplank: {
+    glowLabel: "Side of your stomach works",
     name: "Side plank (from knees)",
     works: ["Side core (obliques)", "Shoulders", "Hips"],
     steps: [
@@ -139,6 +141,7 @@ export const HOW_TO = {
     avoid: ["Holding your breath", "Sucking your stomach in as hard as possible"],
   },
   squeeze: {
+    glowLabel: "Feel it between your shoulder blades",
     name: "Shoulder-blade squeeze",
     works: ["Upper back", "Posture"],
     steps: [
@@ -149,6 +152,7 @@ export const HOW_TO = {
     avoid: ["Shrugging your shoulders up toward your ears", "Arching your lower back"],
   },
   hipflexor: {
+    glowLabel: "Feel the stretch here",
     name: "Hip-flexor stretch",
     works: ["Front of hip", "Posture"],
     steps: [
@@ -158,6 +162,58 @@ export const HOW_TO = {
       "Hold 20–30 seconds, then switch sides.",
     ],
     avoid: ["Arching your lower back", "Bouncing into the stretch"],
+  },
+  breathing: {
+    glowLabel: "Belly expands as you breathe in",
+    name: "Relaxed breathing",
+    works: ["Calm", "Focus", "Recovery"],
+    timer: [{ label: "Start 3-min guided breathing", seconds: 180, mode: "breathe" }],
+    steps: [
+      "Sit comfortably on a chair or the floor, back upright but not stiff.",
+      "Drop your shoulders and unclench your jaw.",
+      "Breathe in gently through your nose for about 3–4 seconds — let your belly expand.",
+      "Breathe out slowly for about 3–4 seconds without forcing it.",
+      "Keep going. Use the timer below: follow the circle — it grows as you breathe in, shrinks as you breathe out.",
+    ],
+    avoid: ["Forcing very deep breaths", "Holding your breath for long", "Continuing if you feel dizzy — stop and breathe normally"],
+  },
+  meditation: {
+    glowLabel: "Calm, natural breathing",
+    name: "Evening meditation",
+    works: ["Focus", "Self-control", "Sleep"],
+    timer: [{ label: "Start 5-min meditation", seconds: 300, mode: "meditate" }],
+    steps: [
+      "Sit comfortably. Close your eyes or look softly at the floor.",
+      "Breathe normally — don't try to control it. Just notice the air going in and out.",
+      "A thought will pop up. That's normal. Notice it (\"thinking\").",
+      "Gently bring your attention back to your breath. No frustration.",
+      "Repeat until the 5 minutes are up. Every 'coming back' is one rep for your focus.",
+    ],
+    avoid: ["Trying to stop all thoughts — that's not the goal", "Judging yourself for drifting", "Going longer than 5 min in the first 2 weeks"],
+  },
+  walk: {
+    name: "Brisk walk",
+    works: ["Heart & lungs", "Digestion", "Recovery"],
+    steps: [
+      "Walk at a pace where you can talk but not sing.",
+      "Look ahead, not down at your phone.",
+      "Keep shoulders relaxed and let your arms swing naturally.",
+      "Take comfortable, normal-length steps.",
+      "Can't do it in one go? Split it into two shorter walks — a 10–15 min walk after a meal also helps bloating.",
+    ],
+    avoid: ["Forcing your stomach in the whole time", "Over-long strides"],
+  },
+  stretch: {
+    name: "Gentle full-body stretch",
+    works: ["Mobility", "Relaxation"],
+    steps: [
+      "Stand tall, feet hip-width apart.",
+      "Reach both arms overhead and lengthen up. Breathe in.",
+      "Breathe out and lean gently to one side. Hold 15–20 seconds.",
+      "Come back to center and repeat on the other side.",
+      "Finish with the hip-flexor stretch (20–30 s per side) if you have time.",
+    ],
+    avoid: ["Bouncing", "Stretching into pain — mild tension only"],
   },
 };
 
@@ -198,10 +254,10 @@ export const WEEK = [
     short: "Wed", title: "Recovery & mobility", focus: "Easy day — recover",
     type: "recovery",
     items: [
-      { name: "Brisk walk", amount: "15–20 min", icon: "🚶" },
+      { name: "Brisk walk", amount: "15–20 min", how: "walk" },
       { name: "Hip-flexor stretch", amount: "20–30 sec / side", how: "hipflexor" },
       { name: "Shoulder-blade squeezes", amount: "10 reps", how: "squeeze" },
-      { name: "Relaxed breathing", amount: "3–5 min", icon: "🌬️" },
+      { name: "Relaxed breathing", amount: "3–5 min", how: "breathing" },
     ],
   },
   {
@@ -231,9 +287,9 @@ export const WEEK = [
     type: "recovery",
     note: "Only 15 minutes? Brisk walk + short mobility session.",
     items: [
-      { name: "Walk", amount: "20–30 min (can split)", icon: "🚶" },
-      { name: "Comfortable stretching", amount: "3–5 min", how: "hipflexor" },
-      { name: "Breathing routine", amount: "3 min", icon: "🌬️" },
+      { name: "Walk", amount: "20–30 min (can split)", how: "walk" },
+      { name: "Comfortable stretching", amount: "3–5 min", how: "stretch" },
+      { name: "Breathing routine", amount: "3 min", how: "breathing" },
     ],
   },
 ];
@@ -257,8 +313,8 @@ export const DAILY_HABITS = [
   { id: "move", label: "Workout or planned walk", target: "15–30 min", icon: "🏃" },
   { id: "protein", label: "Protein at main meals", target: "Each meal", icon: "🥚" },
   { id: "veg", label: "Fruit & vegetables", target: "Variety", icon: "🥦" },
-  { id: "breath", label: "Morning breathing", target: "3 min", icon: "🌬️" },
-  { id: "meditate", label: "Evening meditation", target: "5 min", icon: "🧘" },
+  { id: "breath", label: "Morning breathing", target: "3 min", how: "breathing" },
+  { id: "meditate", label: "Evening meditation", target: "5 min", how: "meditation" },
   { id: "posture", label: "Posture breaks", target: "Every 30–60 min", icon: "🪑" },
   { id: "water", label: "Drink water regularly", target: "Through the day", icon: "💧" },
   { id: "sleep", label: "Sleep", target: "7–9 hours", icon: "😴" },
