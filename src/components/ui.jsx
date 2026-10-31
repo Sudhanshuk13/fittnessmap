@@ -1,17 +1,21 @@
 import { useState } from "react";
-import { HOW_TO } from "../data";
+import Figure from "./Figure";
+import { useHowTo } from "./HowTo";
 
-export function Card({ title, className = "", children }) {
+export function Card({ title, subtitle, className = "", children }) {
   return (
     <section className={`card ${className}`}>
       {title && <h2>{title}</h2>}
+      {subtitle && <p className="card-sub">{subtitle}</p>}
       {children}
     </section>
   );
 }
 
-export function Fold({ title, children }) {
-  const [open, setOpen] = useState(false);
+const isWide = () => window.matchMedia?.("(min-width: 900px)").matches;
+
+export function Fold({ title, children, defaultOpen = isWide() }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
     <section className="card fold">
       <button className="fold-head" onClick={() => setOpen(!open)} aria-expanded={open}>
@@ -30,42 +34,44 @@ export function Progress({ done, total }) {
       <div className="progress">
         <span style={{ width: `${pct}%` }} />
       </div>
-      <span className="progress-label">
-        {done}/{total}
-      </span>
+      <span className="progress-label">{pct === 100 ? "Done 🎉" : `${done}/${total}`}</span>
     </div>
   );
 }
 
-export function CheckRow({ done, onToggle, name, meta, how, steps }) {
-  const [open, setOpen] = useState(false);
-  const detail = steps || (how && HOW_TO[how]);
+export function CheckRow({ done, onToggle, name, meta, how, icon }) {
+  const openHowTo = useHowTo();
+  const show = how ? () => openHowTo(how, meta) : undefined;
   return (
     <li className={`row ${done ? "done" : ""}`}>
-      <button className="check" onClick={onToggle} aria-label={`Mark ${name} done`}>
-        {done ? "✓" : ""}
+      <button className="check" onClick={onToggle} aria-label={`Mark ${name} done`} aria-pressed={done}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 12.5l4.5 4.5L19 7.5" />
+        </svg>
       </button>
-      <div className="row-body" onClick={() => detail && setOpen(!open)}>
+      {how ? (
+        <button className="thumb" onClick={show} aria-label={`How to do ${name}`}>
+          <Figure name={how} />
+        </button>
+      ) : (
+        <span className="thumb emoji" aria-hidden="true">
+          {icon || "•"}
+        </span>
+      )}
+      <div className={`row-body ${how ? "clickable" : ""}`} onClick={show}>
         <div className="row-title">{name}</div>
         <div className="row-meta">{meta}</div>
       </div>
-      {detail && (
-        <button className={`chev ${open ? "up" : ""}`} onClick={() => setOpen(!open)} aria-label="How to">
-          ⌄
+      {how && (
+        <button className="how-btn" onClick={show}>
+          How?
         </button>
-      )}
-      {detail && open && (
-        <ol className="steps">
-          {detail.map((s) => (
-            <li key={s}>{s}</li>
-          ))}
-        </ol>
       )}
     </li>
   );
 }
 
-// Renders a checklist for `items` on `date`, with ids `${prefix}${index}`
+// Checklist for `items` on `date`. Ids default to `${prefix}${index}`.
 export function Checklist({ store, date, items, prefix, idOf, metaOf = (it) => it.amount, nameOf = (it) => it.name }) {
   const id = (it, i) => (idOf ? idOf(it) : `${prefix}${i}`);
   const done = items.filter((it, i) => store.isChecked(date, id(it, i))).length;
@@ -81,7 +87,7 @@ export function Checklist({ store, date, items, prefix, idOf, metaOf = (it) => i
             name={nameOf(it)}
             meta={metaOf(it)}
             how={it.how}
-            steps={it.steps}
+            icon={it.icon}
           />
         ))}
       </ul>

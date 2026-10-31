@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { WEEK, DAILY_HABITS } from "../data";
+import { WEEK, DAILY_HABITS, CORE_ROUTINE } from "../data";
 import { dateForWeekday, todayIdx } from "../store";
 import { Card, Checklist, Note, Bullets } from "../components/ui";
 
 const ORDER = [1, 2, 3, 4, 5, 6, 0]; // Mon → Sun
-const MARK = { strength: "●", recovery: "○", rest: "–" };
+const TYPE_LABEL = { strength: "Strength", recovery: "Active recovery", rest: "Rest" };
 
-export default function Today({ store, goto }) {
+export default function Today({ store }) {
   const [selected, setSelected] = useState(todayIdx);
   const day = WEEK[selected];
   const date = dateForWeekday(selected);
@@ -14,7 +14,7 @@ export default function Today({ store, goto }) {
 
   return (
     <>
-      <div className="chips">
+      <div className="chips" role="tablist" aria-label="Day of week">
         {ORDER.map((i) => {
           const d = WEEK[i];
           const dDate = dateForWeekday(i);
@@ -22,54 +22,62 @@ export default function Today({ store, goto }) {
           return (
             <button
               key={i}
+              role="tab"
+              aria-selected={i === selected}
               className={`chip t-${d.type} ${i === selected ? "sel" : ""} ${i === todayIdx ? "is-today" : ""}`}
               onClick={() => setSelected(i)}
             >
               <span>{d.short}</span>
-              <small>{allDone ? "✓" : MARK[d.type]}</small>
+              <i className={`dot ${allDone ? "ok" : ""}`} />
             </button>
           );
         })}
       </div>
 
-      <Card className={`t-${day.type}`}>
-        <p className="eyebrow">
-          {selected === todayIdx ? "Today" : day.short} · {day.type}
-        </p>
-        <h2 className="day-title">{day.title}</h2>
-        <p className="muted">{day.focus}</p>
-        <Checklist store={store} date={date} items={workoutItems} prefix="w" metaOf={(it) => it.meta} />
-        {day.note && <Note>{day.note}</Note>}
+      <div className="cols">
+        <Card className={`hero-card t-${day.type}`}>
+          <p className="eyebrow">
+            {selected === todayIdx ? "Today" : day.short} · {TYPE_LABEL[day.type]}
+          </p>
+          <h2 className="day-title">{day.title}</h2>
+          <p className="muted">{day.focus}</p>
+          <Checklist store={store} date={date} items={workoutItems} prefix="w" metaOf={(it) => it.meta} />
+          {day.note && <Note>{day.note}</Note>}
+          {day.type === "strength" && <p className="hint">Tap a picture or “How?” to see how to do it.</p>}
+        </Card>
+
         {day.type === "strength" && (
-          <button className="link-btn" onClick={() => goto("core")}>
-            + Finish with the 15-min core routine →
-          </button>
+          <Card title="Then: 15-min core routine" subtitle="Right after the workout. Gentle and controlled.">
+            <Checklist store={store} date={date} items={CORE_ROUTINE} prefix="c" />
+            <Note kind="warn">
+              Notice a lump or ridge along your belly’s midline that stays? Get it checked before progressing core
+              work.
+            </Note>
+          </Card>
         )}
-      </Card>
 
-      <Card title="Daily checklist">
-        <Checklist
-          store={store}
-          date={date}
-          items={DAILY_HABITS}
-          idOf={(h) => `h:${h.id}`}
-          nameOf={(h) => h.label}
-          metaOf={(h) => h.target}
-        />
-        <Note>
-          Busy day? Prioritise the workout or walk, normal meals and sleep. You don't need to do every extra perfectly.
-        </Note>
-      </Card>
+        <Card title="Daily checklist">
+          <Checklist
+            store={store}
+            date={date}
+            items={DAILY_HABITS}
+            idOf={(h) => `h:${h.id}`}
+            nameOf={(h) => h.label}
+            metaOf={(h) => h.target}
+          />
+          <Note>Busy day? Prioritise the workout or walk, normal meals and sleep.</Note>
+        </Card>
 
-      <Card title="Breathing during exercise">
-        <Bullets
-          items={[
-            <><b>Push-ups:</b> breathe in going down, out pushing up.</>,
-            <><b>Squats:</b> breathe in going down, out standing up.</>,
-            "Never hold your breath through a whole set.",
-          ]}
-        />
-      </Card>
+        <Card title="Breathing during exercise">
+          <Bullets
+            items={[
+              <><b>Push-ups:</b> breathe in going down, out pushing up.</>,
+              <><b>Squats:</b> breathe in going down, out standing up.</>,
+              "Never hold your breath through a whole set.",
+            ]}
+          />
+        </Card>
+      </div>
     </>
   );
 }

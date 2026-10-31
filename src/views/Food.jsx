@@ -2,7 +2,7 @@ import { Card, Fold, Note, Bullets } from "../components/ui";
 
 export default function Food() {
   return (
-    <>
+    <div className="cols">
       <Card>
         <p className="eyebrow">At ~65 kg — no aggressive diet</p>
         <h2 className="day-title">Eat enough protein, train, observe</h2>
@@ -98,6 +98,6 @@ export default function Food() {
           or gas.
         </Note>
       </Fold>
-    </>
+    </div>
   );
 }

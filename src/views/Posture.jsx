@@ -55,7 +55,7 @@ function BreathTimer() {
 
 export default function Posture({ store }) {
   return (
-    <>
+    <div className="cols">
       <Card title="5-min posture routine">
         <Checklist store={store} date={todayIso} items={POSTURE} prefix="p" />
       </Card>
@@ -111,6 +111,6 @@ export default function Posture({ store }) {
         </p>
         <p className="muted small">Comfortable movement matters more than holding one perfect position.</p>
       </Card>
-    </>
+    </div>
   );
 }

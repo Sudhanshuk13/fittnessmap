@@ -12,7 +12,7 @@ export default function Track({ store }) {
   };
 
   return (
-    <>
+    <div className="cols">
       <Card title="12-week program">
         <label className="field">
           <span>Start date</span>
@@ -129,6 +129,6 @@ export default function Track({ store }) {
       </Card>
 
       <p className="footer muted small">Data is saved only on this device.</p>
-    </>
+    </div>
   );
 }
